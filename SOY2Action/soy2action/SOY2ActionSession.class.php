@@ -10,7 +10,7 @@ class SOY2ActionSession {
      * @return SOY2UserSession
      */
     public static function &getUserSession(){
-    	@session_start();
+    	if(session_status() == PHP_SESSION_NONE) session_start();
     	if(!isset($_SESSION[self::session_user_key])){
     		$_SESSION[self::session_user_key] = new SOY2UserSession();
     	}
@@ -20,8 +20,8 @@ class SOY2ActionSession {
      * @return SOY2FlashSession
      */
     public static function &getFlashSession(){
-    	@session_start();
-    	static $_request;
+		static $_request;
+		if(session_status() == PHP_SESSION_NONE) session_start();
     	if(is_null($_request)){
     		$_request = true;
     	}
@@ -35,8 +35,10 @@ class SOY2ActionSession {
     	return $_SESSION[self::session_flash_key];
     }
     public static function regenerateSessionId(){
-    	@session_start();
-    	session_regenerate_id(true);
+		if(session_status() == PHP_SESSION_NONE){
+			session_start();
+			session_regenerate_id(true);
+		}
     }
 }
 /**
