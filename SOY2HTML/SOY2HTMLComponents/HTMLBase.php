@@ -37,7 +37,7 @@ class SOYBodyComponentBase extends SOY2HTML{
     }
 	function execute(){
 		$innerHTML = $this->getInnerHTML();
-		$tmpList = array();
+		$tmpList = array()
 		foreach($this->_components as $key => $obj){
 			if($obj instanceof HTMLPage){
 				$obj->setParentPageParam($this->getId());
