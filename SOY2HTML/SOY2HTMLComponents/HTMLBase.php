@@ -92,7 +92,7 @@ class SOYBodyComponentBase extends SOY2HTML{
 	function addText($id, $array=array()){
 		$new = array();
 		if(isset($array["soy2prefix"]) && strlen($array["soy2prefix"])) $new["soy2prefix"] = $array["soy2prefix"];
-		$new["text"] = (isset($array["value"])) ? $array["value"] : null;
+		$new["text"] = (isset($array["value"])) ? $array["value"] : "";
 		if(!strlen($new["text"]) && isset($array["text"]) && strlen($array["text"])) $new["text"] = $array["text"]; //addTextAreaの場合
 		self::createAdd($id. "_text", "HTMLLabel", $new);
 	}

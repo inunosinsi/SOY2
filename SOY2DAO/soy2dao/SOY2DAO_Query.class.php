@@ -32,7 +32,7 @@ class SOY2DAO_Query{
 		switch($this->prefix){
 			case "insert":
 				$sql =  $this->prefix." into ".$this->quoteIdentifier($this->table)." ".$this->sql;
-				if(strlen($this->where)){
+				if(is_string($this->where) && strlen($this->where)){
 					$sql .= " where ".$this->where;
 				}
 				break;
@@ -42,16 +42,16 @@ class SOY2DAO_Query{
 					$sql .= "distinct ";
 				}
 				$sql .= $this->sql." from ".$this->quoteIdentifier($this->table);
-				if(strlen($this->where)){
+				if(is_string($this->where) && strlen($this->where)){
 					$sql .= " where ".$this->where;
 				}
-				if(strlen($this->group)){
+				if(is_string($this->group) && strlen($this->group)){
 					$sql .= " group by ".$this->group;
 				}
-				if(strlen($this->having)){
+				if(is_string($this->having) && strlen($this->having)){
 					$sql .= " having ".$this->having;
 				}
-				if(strlen($this->order)){
+				if(is_string($this->order) && strlen($this->order)){
 					$sql .= " order by ".$this->order;
 				}
 				break;
@@ -63,7 +63,7 @@ class SOY2DAO_Query{
 				break;
 			case "delete":
 				$sql =  $this->prefix." from ".$this->quoteIdentifier($this->table);
-				if(strlen($this->where)){
+				if(is_string($this->where) && strlen($this->where)){
 					$sql .= " where ".$this->where;
 				}
 				break;
@@ -79,7 +79,7 @@ class SOY2DAO_Query{
 		 * 引数の$argumentsはevalの中で使われている
 		 */
 		$phpExpression = '/<\?php\s(.*)?\?>/';
-		if(preg_match($phpExpression,$this->where,$tmp)){
+		if(is_string($this->where) && preg_match($phpExpression,$this->where,$tmp)){
 			$expression = $tmp[1];
 			$expression = str_replace("\\:","@:@",$expression);
 			$expression = preg_replace("/:([a-zA-Z0-9_]+)/",'$arguments[\'$1\']',$expression);
@@ -103,10 +103,10 @@ class SOY2DAO_Query{
 	 * （使われていない模様）
 	 */
 	function replaceTableNames(){
-		$this->table = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->table);
-		$this->sql = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->sql);
-		$this->where = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->where);
-		$this->having = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->having);
+		if(is_string($this->table)) $this->table = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->table);
+		if(is_string($this->sql)) $this->sql = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->sql);
+		if(is_string($this->where)) $this->where = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->where);
+		if(is_string($this->having)) $this->having = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->having);
 	}
 	function replaceTableName($key){
 		return SOY2DAOConfig::getTableMapping($key[1]);

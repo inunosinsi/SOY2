@@ -315,7 +315,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 			case SOY2HTML::HTML_BODY:
 				$regex = '/<(('.$this->tag.')[^<>]*\s'.$this->_soy2_prefix.':('.$suffix.')=\"('.$value.')\"\s?[^>]*)>/i';
 				$tmp = array();
-				if(preg_match($regex,$content,$tmp,PREG_OFFSET_CAPTURE)){
+				if(is_string($content) && preg_match($regex,$content,$tmp,PREG_OFFSET_CAPTURE)){
 					$start = $tmp[0][1];
 					$end = 0;
 					$tmpValue = $tmp[4][0];
@@ -393,7 +393,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 			case SOY2HTML::SKIP_BODY:
 				$regex = '/(<(('.$this->tag.')[^<>]*\s'.$this->_soy2_prefix.':('.$suffix.')=\"('.$value.')\"\s?[^>]*\/?)>)/i';
 				$tmp = array();
-				if(preg_match($regex,$content,$tmp)){
+				if(is_string($content) && preg_match($regex,$content,$tmp)){
 					$result["outerHTML"] = $tmp[1];
 					$result["line"] = $tmp[2];
 					$result["tag"] = $tmp[3];

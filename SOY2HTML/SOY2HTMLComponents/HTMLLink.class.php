@@ -33,7 +33,7 @@ class HTMLLink extends HTMLLabel{
 			$this->link .= $suffix;
 		}
 		$this->setAttribute("href",$this->link);
-		if(strlen($this->target)){
+		if(is_string($this->target) && strlen($this->target)){
 			$this->setAttribute("target",$this->target);
 		}elseif(isset($this->target)){
 			$this->clearAttribute("target");
