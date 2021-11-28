@@ -337,7 +337,7 @@ class HTMLPage extends SOYBodyComponentBase{
 		}
 		fwrite($fp,'<?php /* created ' . date("Y-m-d h:i:s") .' */ ?>');
 		fwrite($fp,"\r\n");
-		if(strlen($this->getId())){
+		if(is_string($this->getId()) && strlen($this->getId())){
 			fwrite($fp,'<?php $'.$this->getPageParam().' = HTMLPage::getPage("'.$this->getId().'"); ?>');
 		}else{
 			fwrite($fp,'<?php $'.$this->getPageParam().' = HTMLPage::getPage(); ?>');
