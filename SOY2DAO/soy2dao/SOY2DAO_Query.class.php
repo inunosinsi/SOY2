@@ -57,7 +57,7 @@ class SOY2DAO_Query{
 				break;
 			case "update":
 				$sql =  $this->prefix." ".$this->quoteIdentifier($this->table)." set ".$this->sql;
-				if(strlen($this->where)){
+				if(is_string($this->where) && strlen($this->where)){
 					$sql .= " where ".$this->where;
 				}
 				break;
@@ -89,7 +89,7 @@ class SOY2DAO_Query{
 			if(!is_string($replace) AND !is_numeric($replace))throw new SOY2DAOException("PHP式の変換に失敗しました。(".$tmp[1].")");
 			$this->where = preg_replace($phpExpression,$replace,$this->where);
 		}
-		if(preg_match($phpExpression,$this->having,$tmp)){
+		if(is_string($this->having) && preg_match($phpExpression,$this->having,$tmp)){
 			$expression = $tmp[1];
 			$expression = preg_replace("/:([a-zA-Z0-9_]*)/",'$arguments[\'$1\']',$expression);
 			$replace = "";
@@ -105,7 +105,7 @@ class SOY2DAO_Query{
 	function replaceTableNames(){
 		if(is_string($this->table)) $this->table = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->table);
 		if(is_string($this->sql)) $this->sql = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->sql);
-		if(is_string($this->where)) $this->where = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->where);
+		if(is_string($this->where))	$this->where = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->where);
 		if(is_string($this->having)) $this->having = preg_replace_callback('/([a-zA-Z_0-9]+)\?/',array($this,'replaceTableName'),$this->having);
 	}
 	function replaceTableName($key){

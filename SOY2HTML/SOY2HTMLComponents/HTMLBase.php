@@ -168,7 +168,7 @@ class SOY2HTMLElement extends SOY2HTML{
 class SOY2HTMLStyle{
 	var $_styles = array();
 	function __construct($style = ""){
-		$styles = explode(";",$style);
+		$styles = (is_string($style) && strlen($style)) ? explode(";",$style) : array();
 		foreach($styles as $str){
 			if(!strstr($str,":"))continue;
 			$array = explode(":",$str,2);

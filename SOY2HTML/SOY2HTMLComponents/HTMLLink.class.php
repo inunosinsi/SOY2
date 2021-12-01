@@ -57,7 +57,8 @@ class HTMLActionLink extends HTMLLink{
 			HTMLLabel::execute();
 		}
 		$link = $this->link;
-		if(strpos($link,"?")===false){
+		if(!is_string($link)) $link = "";
+		if(is_bool(strpos($link,"?"))){
 			$link .= "?";
 		}else{
 			$link .= "&";
