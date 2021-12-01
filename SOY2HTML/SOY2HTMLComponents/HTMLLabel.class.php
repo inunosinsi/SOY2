@@ -26,8 +26,7 @@ class HTMLLabel extends SOY2HTML{
 		if($this->isHtml){
 			return $text;
 		}else{
-			if(!is_string($this->width)) $this->width = "";
-			if(strlen($this->width) > 0 && is_numeric($this->width)){
+			if(is_numeric($this->width) && (int)$this->width >= 0){
 				$this->width = (int)$this->width;
 				if($this->isFolding != true){
 					$width = max(0, $this->width - mb_strwidth($this->suffix));
