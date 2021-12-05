@@ -5,10 +5,10 @@ class SOY2{
 	/**
 	 * アプリケーションのディレクトリを設定（取得）
 	 */
-	public static function RootDir($dir = null){
+	public static function RootDir(string $dir=""){
 		static $_static;
 		if(!$_static)$_static = new SOY2();
-		if($dir){
+		if(strlen($dir)){
 			if(substr($dir,strlen($dir)-1) != '/'){
 				throw new Exception("[SOY2]RootDir must end by '/'.");
 			}
@@ -21,7 +21,7 @@ class SOY2{
 	 *
 	 * @return クラス名
 	 */
-	public static function import($path,$extension =".class.php"){
+	public static function import(string $path, string $extension =".class.php"){
 		if(class_exists($path)){
 			return $path;
 		}
@@ -43,8 +43,8 @@ class SOY2{
 	/**
 	 * 指定ディレクトリにあるクラスを全てインポート
 	 */
-	public static function imports($dir, $rootDir = null){
-		if(!$rootDir)$rootDir = SOY2::RootDir();
+	public static function imports(string $dir, string $rootDir=""){
+		if(!strlen($rootDir)) $rootDir = SOY2::RootDir();
 		$path = str_replace(".","/",$dir);
 		$dirPath = $rootDir.str_replace("*","",$path);
 		$files = scandir($dirPath);
@@ -64,7 +64,7 @@ class SOY2{
 	 * キャスト元のオブジェクトはgetterがあればそちらを、無ければプロパティを直接。
 	 * ただしプロパティがpublicでない場合はコピーしない（警告なし）
 	 */
-	public static function cast($className,$obj){
+	public static function cast($className, $obj){
 		if(!is_object($className)){
 			if($className != "array" && $className != "object"){
 				$result = self::import($className);
@@ -135,7 +135,7 @@ class SOY2{
 	 * 		"pass"		=> ""
 	 * ));
 	 */
-	public static function config($array){
+	public static function config(array $array){
 		if(isset($array['RootDir'])){
 			SOY2::RootDir($array['RootDir']);
 		}

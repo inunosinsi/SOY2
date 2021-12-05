@@ -10,7 +10,7 @@ interface SOY2_Controller{
  * @package SOY2.controller
  */
 interface SOY2_ClassPathBuilder{
-	function getClassPath($path);
+	function getClassPath(string $path);
 }
 /**
  * @package SOY2.controller

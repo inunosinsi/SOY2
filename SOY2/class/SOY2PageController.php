@@ -7,14 +7,10 @@ class SOY2PageController implements SOY2_Controller{
 	var $defaultPath = "Index";
 	var $requestPath = "";
 	var $arguments = array();
-	public static function init($controller = null){
+	public static function init(string $controller=""){
 		static $_controller;
-		if(!$_controller){
-			if($controller){
-				$_controller = new $controller();
-			}else{
-				$_controller = new SOY2PageController();
-			}
+		if(is_null($_controller)){
+			$_controller = strlen($controller) ? new $controller() : new SOY2PageController();
 		}
 		return $_controller;
 	}
@@ -71,7 +67,7 @@ class SOY2PageController implements SOY2_Controller{
 	 * @param $args
 	 * @param $classPath
 	 */
-	function onNotFound($path = null, $args = null, $classPath = null){
+	function onNotFound(string $path="", array $args=array(), string $classPath=""){
 		header("HTTP/1.1 404 Not Found");
 		header("Content-Type: text/html; charset=utf-8");
 		echo "<h1>404 Not Found</h1><hr>指定のパスへのアクセスは有効でありません。";
@@ -81,16 +77,16 @@ class SOY2PageController implements SOY2_Controller{
 		$controller = self::init();
 		return $controller->defaultPath;
 	}
-	function setDefaultPath($path){
+	function setDefaultPath(string $path){
 		$controller = self::init();
 		$controller->defaultPath = $path;
 	}
-	public static function jump($path){
+	public static function jump(string $path){
 		$url = self::createLink($path, true);
 		header("Location: ".$url);
 		exit;
 	}
-	public static function redirect($path, $permanent = false){
+	public static function redirect(string $path, bool $permanent=false){
 		if($permanent){
 			header("HTTP/1.1 301 Moved Permanently");
 		}
@@ -105,24 +101,20 @@ class SOY2PageController implements SOY2_Controller{
 	}
 	function &getPathBuilder(){
 		static $builder;
-		if(!$builder){
-			$builder = new SOY2_PathInfoPathBuilder();
-		}
+		if(is_null($builder)) $builder = new SOY2_PathInfoPathBuilder();
 		return $builder;
 	}
 	function &getClassPathBuilder(){
 		static $builder;
-		if(!$builder){
-			$builder = new SOY2_DefaultClassPathBuilder();
-		}
+		if(is_null($builder)) $builder = new SOY2_DefaultClassPathBuilder();
 		return $builder;
 	}
-	public static function createLink($path, $isAbsoluteUrl = false){
+	public static function createLink(string $path, bool $isAbsoluteUrl=false){
 		$controller = self::init();
 		$pathBuilder = $controller->getPathBuilder();
 		return $pathBuilder->createLinkFromPath($path, $isAbsoluteUrl);
 	}
-	public static function createRelativeLink($path, $isAbsoluteUrl = false){
+	public static function createRelativeLink(string $path, bool $isAbsoluteUrl=false){
 		$controller = self::init();
 		$pathBuilder = $controller->getPathBuilder();
 		return $pathBuilder->createLinkFromRelativePath($path, $isAbsoluteUrl);
@@ -165,7 +157,7 @@ class SOY2_PathInfoPathBuilder implements SOY2_PathBuilder{
 	 * パスからURLを生成する
 	 * スクリプトのファイル名を含む（ただし$pathが空の時はスクリプト名を付けない）
 	 */
-	function createLinkFromPath($path, $isAbsoluteUrl = false){
+	function createLinkFromPath(string $path, bool $isAbsoluteUrl=false){
 		$scriptPath = self::getScriptPath();
 		if(strlen($path)>0){
 			$path = $scriptPath . "/" . str_replace(".","/",$path);
@@ -183,7 +175,7 @@ class SOY2_PathInfoPathBuilder implements SOY2_PathBuilder{
 	 * @param String $path 相対パス
 	 * @param Boolean $isAbsoluteUrl 返り値を絶対URL（http://example.com/path/to）で返すかルートからの絶対パス（/path/to）で返すか
 	 */
-	function createLinkFromRelativePath($path, $isAbsoluteUrl = false){
+	function createLinkFromRelativePath(string $path, bool $isAbsoluteUrl=false){
 		if(preg_match("/^https?:/",$path)){
 			return $path;
 		}
@@ -205,7 +197,7 @@ class SOY2_PathInfoPathBuilder implements SOY2_PathBuilder{
 	 */
 	protected static function getScriptPath(){
 		static $script;
-		if(!$script){
+		if(is_null($script)){
 			/**
 			 * @TODO ルート的にアクセスされた場合は、フロントコントローラーの設置場所をDocumentRootとみなす。
 			 */
@@ -221,15 +213,11 @@ class SOY2_PathInfoPathBuilder implements SOY2_PathBuilder{
 	/**
 	 * 絶対パスにドメインなどを付加して絶対URLに変換する
 	 */
-	protected static function createAbsoluteURL($path){
+	protected static function createAbsoluteURL(string $path){
 		static $scheme, $domain, $port;
-		if(!$scheme){
-			$scheme = (isset($_SERVER["HTTPS"]) || defined("SOY2_HTTPS") && SOY2_HTTPS) ? "https" : "http";
-		}
-		if(!$domain && isset($_SERVER["SERVER_NAME"])){
-			$domain = $_SERVER["SERVER_NAME"];
-		}
-		if(!$port){
+		if(is_null($scheme)) $scheme = (isset($_SERVER["HTTPS"]) || defined("SOY2_HTTPS") && SOY2_HTTPS) ? "https" : "http";
+		if(is_null($domain) && isset($_SERVER["SERVER_NAME"])) $domain = $_SERVER["SERVER_NAME"];
+		if(is_null($port)){
 			if(!isset($_SERVER["SERVER_PORT"])) $_SERVER["SERVER_PORT"] = 80;
 			if( $_SERVER["SERVER_PORT"] == "80" && !isset($_SERVER["HTTPS"]) || $_SERVER["SERVER_PORT"] == "443" && isset($_SERVER["HTTPS"]) ){
 				$port = "";
@@ -244,7 +232,7 @@ class SOY2_PathInfoPathBuilder implements SOY2_PathBuilder{
 	/**
 	 * 指定したディレクトリからの相対パスを絶対パスに変換する
 	 */
-	protected static function convertRelativePathToAbsolutePath($relativePath, $base){
+	protected static function convertRelativePathToAbsolutePath(string $relativePath, string $base){
 		$base = str_replace("\\","/",$base);
 		$base = preg_replace("/\/+/","/",$base);
 		$relativePath = str_replace("\\","/",$relativePath);
@@ -271,7 +259,7 @@ class SOY2_PathInfoPathBuilder implements SOY2_PathBuilder{
  * @package SOY2.controller
  */
 class SOY2_DefaultClassPathBuilder implements SOY2_ClassPathBuilder{
-	function getClassPath($path){
+	function getClassPath(string $path){
 		return $path;
 	}
 }
