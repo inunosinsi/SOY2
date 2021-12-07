@@ -13,12 +13,12 @@ class HTMLImage extends SOY2HTML{
     	$this->setSrc($path);
     }
     function execute(){
-    	$this->setAttribute("src",$this->src);
+    	$this->setAttribute("src", (string)$this->src);
     }
     function getObject(){
     	return $this->src;
     }
     function setAlt($alt){
-    	$this->setAttribute("alt",$alt);
+    	$this->setAttribute("alt", (string)$alt);
     }
 }

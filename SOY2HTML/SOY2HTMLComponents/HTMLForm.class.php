@@ -29,20 +29,20 @@ class HTMLForm extends SOYBodyComponentBase{
     }
     function execute(){
 		SOYBodyComponentBase::execute();
-		if($this->action){
-			$this->setAttribute("action",$this->action);
-		}else{
-			$this->setAttribute("action",@$_SERVER["REQUEST_URI"]);
+		if(is_string($this->action)){
+			$this->setAttribute("action", $this->action);
+		}else if(isset($_SERVER["REQUEST_URI"])){
+			$this->setAttribute("action", $_SERVER["REQUEST_URI"]);
 		}
-		$this->setAttribute('method',$this->_method);
-		$disabled = ($this->disabled) ? "disabled" : null;
+		$this->setAttribute('method', (string)$this->_method);
+		$disabled = ($this->disabled) ? "disabled" : "";
 		$this->setAttribute("disabled",$disabled, false);
     }
     function setOnSubmit($value){
     	if(!preg_match("/^javascript:/i",$value)){
     		$value = "javascript:".$value;
     	}
-    	$this->setAttribute("onsubmit",$value);
+    	$this->setAttribute("onsubmit", (string)$value);
     }
 	function getDisabled() {
 		return $this->disabled;
@@ -69,9 +69,9 @@ abstract class HTMLFormElement extends SOY2HTML{
 	private $readonly;
 	function execute(){
 		parent::execute();
-		$disabled = ($this->disabled) ? "disabled" : null;
+		$disabled = ($this->disabled) ? "disabled" : "";
 		$this->setAttribute("disabled",$disabled, false);
-		$readonly = ($this->readonly) ? "readonly" : null;
+		$readonly = ($this->readonly) ? "readonly" : "";
 		$this->setAttribute("readonly",$readonly, false);
 	}
 	function setName($value){
@@ -101,7 +101,7 @@ class HTMLInput extends HTMLFormElement{
 	var $type;
 	function setValue($value){
 		$this->value = $value;
-		$this->setAttribute("value",$this->value);
+		$this->setAttribute("value", (string)$this->value);
 	}
 	function execute(){
 		parent::execute();
@@ -224,7 +224,7 @@ class HTMLSelect extends HTMLFormElement {
 		$innerHTML  = $this->getInnerHTML();
 		parent::execute();
 		$this->setInnerHTML($innerHTML.$this->getInnerHTML());
-		$multiple = ($this->multiple) ? "multiple" : null;
+		$multiple = ($this->multiple) ? "multiple" : "";
 		$this->setAttribute("multiple",$multiple, false);
 	}
 	function getObject(){
@@ -351,9 +351,9 @@ class HTMLCheckBox extends HTMLInput {
 	}
 	function execute(){
 		parent::execute();
-		if(!$this->elementId) $this->elementId = "label_" . md5((string)$this->value.(string)$this->name.(string)rand(0,1));
+		if(!is_string($this->elementId)) $this->elementId = "label_" . md5((string)$this->value.(string)$this->name.(string)rand(0,1));
 		$this->setAttribute("id",$this->elementId);
-		$checked = ($this->selected) ? "checked" : null;
+		$checked = ($this->selected) ? "checked" : "";
 		$this->setAttribute("checked",$checked, false);
 	}
 	function getLabel(){

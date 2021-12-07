@@ -1,10 +1,10 @@
 <?php
 
-function soy2html_layout_include($file){
+function soy2html_layout_include(string $file){
 	$layoutDir = SOY2HTMLConfig::LayoutDir();
 	@include($layoutDir . $file);
 }
-function soy2html_layout_get($file){
+function soy2html_layout_get(string $file){
 	try{
 		ob_start();
 		soy2html_layout_include($file);

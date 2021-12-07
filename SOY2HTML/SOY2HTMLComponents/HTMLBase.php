@@ -8,7 +8,7 @@ class SOYBodyComponentBase extends SOY2HTML{
 	protected $_tmpList = array();
 	protected $_childSoy2Prefix  = "soy";
 	const SOY_TYPE = SOY2HTML::SOY_BODY;
-    function add($id,$obj){
+    function add(string $id, $obj){
     	$obj->setId($id);
     	$obj->setParentObject($this);
     	$obj->init();
@@ -22,7 +22,7 @@ class SOYBodyComponentBase extends SOY2HTML{
 	 * @param $array = array()　setter injection
 	 * @see HTMLPage.add
 	 */
-	function createAdd($id,$className,$array = array()){
+	function createAdd(string $id, string $className, array $array=array()){
 		if(!isset($array["soy2prefix"]) && $this->_childSoy2Prefix) {
 			if(!is_array($array)) $array = array();
 			$array["soy2prefix"] = $this->_childSoy2Prefix;
@@ -37,7 +37,7 @@ class SOYBodyComponentBase extends SOY2HTML{
     }
 	function execute(){
 		$innerHTML = $this->getInnerHTML();
-		$tmpList = array()
+		$tmpList = array();
 		foreach($this->_components as $key => $obj){
 			if($obj instanceof HTMLPage){
 				$obj->setParentPageParam($this->getId());
@@ -62,41 +62,41 @@ class SOYBodyComponentBase extends SOY2HTML{
 	}
 
 	/** PHP7.4対応 __call()の廃止 **/
-	function addForm($id, $array=array()){self::createAdd($id, "HTMLForm", $array);}
-	function addUploadForm($id, $array=array()){self::createAdd($id, "HTMLUploadForm", $array);}
-	function addModel($id, $array=array()){self::createAdd($id, "HTMLModel", $array);}
-	function addLabel($id, $array=array()){self::createAdd($id, "HTMLLabel", $array);}
-	function addImage($id, $array=array()){self::createAdd($id, "HTMLImage", $array);}
-	function addLink($id, $array=array()){self::createAdd($id, "HTMLLink", $array);}
-	function addActionLink($id, $array=array()){self::createAdd($id, "HTMLActionLink", $array);}
-	function addInput($id, $array=array()){
+	function addForm(string $id, array $array=array()){self::createAdd($id, "HTMLForm", $array);}
+	function addUploadForm(string $id, array $array=array()){self::createAdd($id, "HTMLUploadForm", $array);}
+	function addModel(string $id, array $array=array()){self::createAdd($id, "HTMLModel", $array);}
+	function addLabel(string $id, array $array=array()){self::createAdd($id, "HTMLLabel", $array);}
+	function addImage(string $id, array $array=array()){self::createAdd($id, "HTMLImage", $array);}
+	function addLink(string $id, array $array=array()){self::createAdd($id, "HTMLLink", $array);}
+	function addActionLink(string $id, array $array=array()){self::createAdd($id, "HTMLActionLink", $array);}
+	function addInput(string $id, array $array=array()){
 		self::createAdd($id, "HTMLInput", $array);
 		self::addText($id, $array);
 	}
-	function addTextArea($id, $array=array()){
+	function addTextArea(string $id, array $array=array()){
 		self::createAdd($id, "HTMLTextArea", $array);
 		self::addText($id, $array);
 	}
-	function addCheckBox($id, $array=array()){
+	function addCheckBox(string $id, array $array=array()){
 		self::createAdd($id, "HTMLCheckBox", $array);
 		self::addText($id, $array);
 	}
-	function addSelect($id, $array=array()){
+	function addSelect(string $id, array $array=array()){
 		self::createAdd($id, "HTMLSelect", $array);
 		self::addText($id, $array);
 	}
-	function addHidden($id, $array=array()){self::createAdd($id, "HTMLHidden", $array);}
-	function addScript($id, $array=array()){self::createAdd($id, "HTMLScript", $array);}
-	function addCSS($id, $array=array()){self::createAdd($id, "HTMLCSS", $array);}
-	function addCSSLink($id, $array=array()){self::createAdd($id, "HTMLCSSLink", $array);}
-	function addText($id, $array=array()){
+	function addHidden(string $id, array $array=array()){self::createAdd($id, "HTMLHidden", $array);}
+	function addScript(string $id, array $array=array()){self::createAdd($id, "HTMLScript", $array);}
+	function addCSS(string $id, array $array=array()){self::createAdd($id, "HTMLCSS", $array);}
+	function addCSSLink(string $id, array $array=array()){self::createAdd($id, "HTMLCSSLink", $array);}
+	function addText(string $id, array $array=array()){
 		$new = array();
 		if(isset($array["soy2prefix"]) && strlen($array["soy2prefix"])) $new["soy2prefix"] = $array["soy2prefix"];
 		$new["text"] = (isset($array["value"])) ? $array["value"] : "";
 		if(!strlen($new["text"]) && isset($array["text"]) && strlen($array["text"])) $new["text"] = $array["text"]; //addTextAreaの場合
 		self::createAdd($id. "_text", "HTMLLabel", $new);
 	}
-	function addList($id, $array=array()){self::createAdd($id, "HTMLList", $array);}
+	function addList(string $id, array $array=array()){self::createAdd($id, "HTMLList", $array);}
 }
 /**
  * @package SOY2.SOY2HTML
@@ -134,7 +134,7 @@ class SOY2HTMLElement extends SOY2HTML{
 	function getEndTag(){
 		return "";
 	}
-	function setAttribute($key,$value,$flag = true){
+	function setAttribute(string $key, string $value="", bool $flag=true){
 		$this->_attribute[$key] = $value;
 	}
 	function getObject(){

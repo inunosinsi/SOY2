@@ -29,10 +29,9 @@ class HTMLLink extends HTMLLabel{
 			parent::execute();
 		}
 		$suffix = $this->getAttribute($this->_soy2_prefix . ":suffix");
-		if($suffix){
-			$this->link .= $suffix;
-		}
-		$this->setAttribute("href",$this->link);
+		if($suffix) $this->link .= $suffix;
+
+		$this->setAttribute("href",(string)$this->link);
 		if(is_string($this->target) && strlen($this->target)){
 			$this->setAttribute("target",$this->target);
 		}elseif(isset($this->target)){

@@ -14,28 +14,28 @@ class HTMLPager extends SOYBodyComponentBase{
 	private $limit = 0;
     function execute(){
     	if($this->_soy2_parent){
-			$this->_soy2_parent->createAdd("count_start","HTMLLabel",array(
+			$this->_soy2_parent->addLabel("count_start", array(
 				"text" => $this->getStart()
 			));
-			$this->_soy2_parent->createAdd("count_end","HTMLLabel",array(
+			$this->_soy2_parent->addLabel("count_end", array(
 				"text" => $this->getEnd()
 			));
-			$this->_soy2_parent->createAdd("count_max","HTMLLabel",array(
+			$this->_soy2_parent->addLabel("count_max", array(
 				"text" => $this->getTotal()
 			));
     	}
 		$next = $this->getNextParam();
-		$this->createAdd("next_link","HTMLLink",$next);
-		$this->createAdd("next_link_wrap","HTMLModel",array("visible" => $next["visible"]));
+		$this->addLink("next_link", $next);
+		$this->addLink("next_link_wrap", array("visible" => $next["visible"]));
 		$prev = $this->getPrevParam();
-		$this->createAdd("prev_link","HTMLLink",$prev);
-		$this->createAdd("prev_link_wrap","HTMLModel",array("visible" => $prev["visible"]));
+		$this->addLink("prev_link", $prev);
+		$this->addModel("prev_link_wrap", array("visible" => $prev["visible"]));
 		$this->createAdd("pager_list","SOY2HTMLPager_List",$this->getPagerParam());
-		$this->createAdd("pager_jump","HTMLForm",array(
+		$this->addForm("pager_jump", array(
 			"method" => "get",
 			"action" => $this->getLink()
 		));
-		$this->createAdd("pager_select","HTMLSelect",array(
+		$this->addSelect("pager_select", array(
 			"name" => "page",
 			"options" => $this->getSelectArray(),
 			"selected" => $this->getPage(),
@@ -160,20 +160,20 @@ class SOY2HTMLPager_List extends HTMLList{
 			$text= $bean;
 		}
 		$url = $this->url . $link;
-		$this->createAdd("page_link","HTMLLink",array(
+		$this->addLink("page_link", array(
 			"text" => $text,
 			"link" => ($this->current != $link)?$url : ""
 		));
-		$this->createAdd("page_link_only","HTMLLink",array(
+		$this->addLink("page_link_only", array(
 			"link" => $url
 		));
-		$this->createAdd("page_text","HTMLLabel",array(
+		$this->addLabel("page_text", array(
 			"text" => $text
 		));
-		$this->createAdd("current_page","HTMLModel",array(
+		$this->addModel("current_page", array(
 			"visible" => ($this->current == $link)
 		));
-		$this->createAdd("other_page","HTMLModel",array(
+		$this->addModel("other_page", array(
 			"visible" => ($this->current != $link)
 		));
 	}

@@ -39,12 +39,12 @@ class HTMLList extends SOYBodyComponentBase{
 		$innerHTML = $this->getInnerHTML();
 		$old = error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 		$this->populateItemImpl(new HTMLList_DummyObject(),null,-1,count($this->list));
-		$this->createAdd("index","HTMLLabel",array("text" => ""));
+		$this->addLabel("index", array("text" => ""));
 		$this->createAdd("loop","HTMLList_LoopModel",array("counter" => -1));
-		$this->createAdd("at_first","HTMLModel",array("visible" => false));
-		$this->createAdd("not_first","HTMLModel",array("visible" => false));
-		$this->createAdd("at_last","HTMLModel",array("visible" => false));
-		$this->createAdd("not_last","HTMLModel",array("visible" => false));
+		$this->addModel("at_first", array("visible" => false));
+		$this->addModel("not_first", array("visible" => false));
+		$this->addModel("at_last", array("visible" => false));
+		$this->addModel("not_last", array("visible" => false));
 		error_reporting($old);
 		parent::execute();
 		$counter = 0;
@@ -53,12 +53,12 @@ class HTMLList extends SOYBodyComponentBase{
 			$counter++;
 			$tmpList = array();
 			$res = $this->populateItemImpl($listObj,$listKey,$counter,$length);
-			$this->createAdd("index","HTMLLabel",array("text" => $counter));
+			$this->addLabel("index", array("text" => $counter));
 			$this->createAdd("loop","HTMLList_LoopModel",array("counter" => $counter));
-			$this->createAdd("at_first","HTMLModel",array("visible" => $counter == 1));
-			$this->createAdd("not_first","HTMLModel",array("visible" => $counter != 1));
-			$this->createAdd("at_last","HTMLModel",array("visible" => $counter == $length));
-			$this->createAdd("not_last","HTMLModel",array("visible" => $counter != $length));
+			$this->addModel("at_first", array("visible" => $counter == 1));
+			$this->addModel("not_first", array("visible" => $counter != 1));
+			$this->addModel("at_last", array("visible" => $counter == $length));
+			$this->addModel("not_last", array("visible" => $counter != $length));
 			if($res === false)continue;
 			foreach($this->_components as $key => $obj){
 				$obj->setContent($innerHTML);

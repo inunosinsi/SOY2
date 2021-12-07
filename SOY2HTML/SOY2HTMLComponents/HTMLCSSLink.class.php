@@ -11,7 +11,7 @@ class HTMLCSSLink extends SOY2HTML{
 		$this->link = $link;
 	}
 	function execute(){
-		$this->setAttribute("href",$this->link);
+		$this->setAttribute("href", (string)$this->link);
 	}
 	function getObject(){
 		return $this->link;

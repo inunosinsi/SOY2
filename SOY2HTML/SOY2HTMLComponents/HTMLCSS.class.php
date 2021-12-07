@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package SOY2.SOY2HTML
  */

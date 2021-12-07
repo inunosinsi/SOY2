@@ -12,17 +12,17 @@ class HTMLScript extends SOY2HTML{
     	$this->script = $script;
     }
     function setSrc($src){
-    	$this->setAttribute("src",$src);
+    	$this->setAttribute("src", (string)$src);
     }
     function execute(){
-    	$this->setAttribute("type",$this->type);
+    	$this->setAttribute("type", (string)$this->type);
     	parent::execute();
     }
     function setType($type){
     	$this->type = $type;
     }
     function getObject(){
-    	if(strlen($this->script)){
+    	if(is_string($this->script) && strlen($this->script)){
     		return "<!--\n".$this->script."\n-->";//htmlspecialchars((string)$this->script,ENT_QUOTES,SOY2HTML::ENCODING)
     	}else{
     		return $this->script;

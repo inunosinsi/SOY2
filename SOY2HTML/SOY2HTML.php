@@ -25,7 +25,7 @@ class SOY2HTMLBase{
 	 * @return 実行された関数の結果
 	 *
 	 */
-	function __call($name,$args){
+	function __call(string $name, array $args){
 		/** PHP7.4対策で廃止
 		if(method_exists($this,"createAdd") && preg_match('/^add([A-Za-z]+)$/',$name,$tmp) && count($args)>0){
 			$class = "HTML" . $tmp[1];
@@ -71,7 +71,7 @@ class SOY2HTMLBase{
 	 * @param $args パラメータ
 	 * @param $code 実行内容
 	 */
-	function addFunction($name,$args,$code){
+	function addFunction(string $name, array $args, string $code){
 		$this->_soy2_functions[$name]['args'] = $args;
 		$this->_soy2_functions[$name]['code'] = $code;
 	}
@@ -290,7 +290,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 	 * @param $content HTMLソースコード
 	 */
 	function setContent($content){
-		list($tag,$line,$innerHTML,$outerHTML,$value,$suffix,$skipendtag) = $this->parse("id",$this->_soy2_id,$content);
+		list($tag,$line,$innerHTML,$outerHTML,$value,$suffix,$skipendtag) = $this->parse("id",$this->_soy2_id, (string)$content);
 		$this->tag = $tag;
 		$this->parseAttributes($line);
 		$this->_soy2_innerHTML = $innerHTML;
@@ -300,7 +300,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 	/**
 	 * @return array(tag,line,innerhtml,outerhtml,value,suffix,skipendtag)
 	 */
-	function parse($suffix,$value,$content){
+	function parse(string $suffix, string $value, string $content){
 		$result = array(
 			"tag" => "",
 			"line" => "",
@@ -450,7 +450,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 	 *
 	 * @param $line
 	 */
-	function parseAttributes($line){
+	function parseAttributes(string $line){
 		$regex ='/([a-zA-Z_:][a-zA-Z0-9_:.\-]*)\s*=\s*"([^"]*)"/';
 		$tmp = array();
 		if(preg_match_all($regex,$line,$tmp)){
@@ -480,7 +480,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 	 *
 	 * @return 置換された形のcontent
 	 */
-	function getContent(SOY2HTML $tag,$content){
+	function getContent(SOY2HTML $tag, string $content){
 		$in = $tag->_soy2_outerHTML;
 		$tag->parseMessageProperty();
 		$out = "";
@@ -576,7 +576,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 	 *
 	 * @return 属性の値
 	 */
-	function getAttribute($key){
+	function getAttribute(string $key){
 		$key = strtolower($key);
 		return (isset($this->_attribute[$key]) && $this->_attribute[$key] !== true) ? $this->_attribute[$key] :
 				 (isset($this->_soy2_attribute[$key]) ? $this->_soy2_attribute[$key] : null);
@@ -592,7 +592,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 	 * @param $flag 属性が常に存在するかどうか（disabled, readonlyなどはfalse）
 	 *
 	 */
-	function setAttribute($key,$value,$flag = true){
+	function setAttribute(string $key, string $value="", bool $flag=true){
 		$key = strtolower($key);
 		$this->_attribute[$key] = $flag;
 		$this->_soy2_attribute[$key] = $value;
@@ -600,27 +600,21 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 	/**
 	 * 属性値を保存する
 	 */
-	function setPermanentAttribute($key,$value){
+	function setPermanentAttribute(string $key,string $value){
 		if(!$this->getIsModified())return;
 		$this->_soy2_permanent_attributes[$key] = $value;
 	}
 	/**
 	 * 保存した属性値を取得する
 	 */
-	function getPermanentAttribute($key = null){
-		if(is_null($key)){
-			return $this->_soy2_permanent_attributes;
-		}
-		if(isset($this->_soy2_permanent_attributes[$key])){
-			return $this->_soy2_permanent_attributes[$key];
-		}else{
-			return null;
-		}
+	function getPermanentAttribute(string $key=""){
+		if(!strlen($key)) return $this->_soy2_permanent_attributes;
+		return (isset($this->_soy2_permanent_attributes[$key])) ? $this->_soy2_permanent_attributes[$key] : null;
 	}
 	/**
 	 * 属性を消去する
 	 */
-	function clearAttribute($key){
+	function clearAttribute(string $key){
 		$key = strtolower($key);
 		$this->_attribute[$key] = null;
 		$this->_soy2_attribute[$key] = null;
@@ -726,7 +720,7 @@ abstract class SOY2HTML extends SOY2HTMLBase{
 	/**
 	 * HTMLのタグを除去して実体参照をテキストに戻す
 	 */
-	public static function ToText($html, $encoding = SOY2HTML::ENCODING){
+	public static function ToText(string $html, string $encoding=SOY2HTML::ENCODING){
 		/*
 		 * html_entity_decodeは文字コードの指定が重要
 		 * http://jp2.php.net/manual/ja/function.html-entity-decode.php#function.html-entity-decode.notes
@@ -762,9 +756,9 @@ class SOY2HTMLConfig{
 		}
 		return $_static;
 	}
-	public static function CacheDir($dir = null){
+	public static function CacheDir(string $dir=""){
 		$config = self::getInstance();
-		if($dir){
+		if(strlen($dir)){
 			if(substr($dir,strlen($dir)-1) != '/'){
 				throw new SOY2HTMLException("[SOY2HTML]CacheDir must end by '/'.");
 			}
@@ -772,9 +766,9 @@ class SOY2HTMLConfig{
 		}
 		return $config->cacheDir;
 	}
-	public static function PageDir($dir = null){
+	public static function PageDir(string $dir=""){
 		$config = self::getInstance();
-		if($dir){
+		if(strlen($dir)){
 			if(substr($dir,strlen($dir)-1) != '/'){
 				throw new SOY2HTMLException("[SOY2HTML]PageDir must end by '/'.");
 			}
@@ -782,9 +776,9 @@ class SOY2HTMLConfig{
 		}
 		return $config->pageDir;
 	}
-	public static function TemplateDir($dir = null){
+	public static function TemplateDir(string $dir=""){
 		$config = self::getInstance();
-		if($dir){
+		if(strlen($dir)){
 			if(substr($dir,strlen($dir)-1) != '/'){
 				throw new SOY2HTMLException("[SOY2HTML]TemplateDir must end by '/'.");
 			}
@@ -792,9 +786,9 @@ class SOY2HTMLConfig{
 		}
 		return $config->templateDir;
 	}
-	public static function LayoutDir($dir = null){
+	public static function LayoutDir(string $dir=""){
 		$config = self::getInstance();
-		if($dir){
+		if(strlen($dir)){
 			if(substr($dir,strlen($dir)-1) != '/'){
 				throw new SOY2HTMLException("[SOY2HTML]Layout Dir must end with '/'.");
 			}
@@ -805,9 +799,9 @@ class SOY2HTMLConfig{
 	/**
 	 * SOY2HTMLの言語を設定する
 	 */
-	public static function Language($lang = null){
+	public static function Language(string $lang=""){
 		$config = self::getInstance();
-		if($lang){
+		if(strlen($lang)){
 			$config->lang = $lang;
 		}
 		return $config->lang;
@@ -815,7 +809,7 @@ class SOY2HTMLConfig{
 	/**
 	 * オプション設定
 	 */
-	public static function setOption($key, $value = null){
+	public static function setOption(string $key, $value=null){
 		$config = self::getInstance();
 		if($value)$config->options[$key] = $value;
 		return (isset($config->options[$key]) ) ? $config->options[$key] : null;
@@ -823,7 +817,7 @@ class SOY2HTMLConfig{
 	/**
 	 * オプション取得
 	 */
-	public static function getOption($key){
+	public static function getOption(string $key){
 		return self::setOption($key);
 	}
 }
@@ -842,7 +836,7 @@ class SOY2HTMLFactory extends SOY2HTMLBase{
 	 *
 	 * @return クラスのインスタンス
 	 */
-	public static function &createInstance($className,$attributes = array()){
+	public static function &createInstance(string $className, array $attributes=array()){
 		if(!class_exists($className)){
 			try{
 				self::importWebPage($className);
@@ -865,12 +859,12 @@ class SOY2HTMLFactory extends SOY2HTMLBase{
 		if(is_array($attributes)){
 			foreach($attributes as $key => $value){
 				if($key == "id"){
-					$class->setAttribute($key,$value);
+					$class->setAttribute($key,(string)$value);
 					continue;
 				}
 				if(strpos($key,"attr:") !== false){
 					$key = substr($key,5);
-					$class->setAttribute($key,$value);
+					$class->setAttribute($key,(string)$value);
 					continue;
 				}
 				if(method_exists($class,"set".ucwords($key))  || $class->functionExists("set".ucwords($key))){
@@ -892,7 +886,7 @@ class SOY2HTMLFactory extends SOY2HTMLBase{
 					$class->addFunction($funcName,$args,$code);
 					continue;
 				}
-				$class->setAttribute($key,$value);
+				$class->setAttribute($key, (string)$value);
 			}
 		}
 
@@ -904,7 +898,7 @@ class SOY2HTMLFactory extends SOY2HTMLBase{
 	 * @param $className クラス名
 	 * @exception SOY2HTMLException ファイルが存在しないとき
 	 */
-	public static function importWebPage($className){
+	public static function importWebPage(string $className){
 		if(self::pageExists($className) == false){
 			throw new SOY2HTMLException();
 		}
@@ -913,7 +907,7 @@ class SOY2HTMLFactory extends SOY2HTMLBase{
 		$extension = ".class.php";
 		include_once($pageDir.$path.$extension);
 	}
-	public static function pageExists($className){
+	public static function pageExists(string $className){
 		$pageDir = SOY2HTMLConfig::PageDir();
 		$path = str_replace(".","/",$className);
 		$extension = ".class.php";
@@ -930,7 +924,7 @@ class SOY2HTMLFactory extends SOY2HTMLBase{
 		}
 		return $className;
 	}
-	private static function generateWebPage($className,$path){
+	private static function generateWebPage(string $className, string $path){
 		$templatePath = $path . ".html";
 		$fullPath = $path . ".class.php";
 		$dirpath = dirname($fullPath);
@@ -994,7 +988,7 @@ class SOY2HTMLFactory extends SOY2HTMLBase{
 		$class[] = implode("\n",$classes);
 		file_put_contents($fullPath,"<?php \n".implode("\n",$docComment) ."\n". implode("\n",$class)."\n?>");
 	}
-	private static function generateCreateAdd($soyIds,$className = "HTMLLabel"){
+	private static function generateCreateAdd(array $soyIds, string $className="HTMLLabel"){
 		$keys = array_keys($soyIds);
 		$script = array();
 		$classes = array();

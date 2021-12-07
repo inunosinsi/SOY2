@@ -4,13 +4,13 @@
  * @package SOY2.SOY2Logic
  */
 interface SOY2LogicInterface{
-	public static function getInstance($className,$args);
+	public static function getInstance(string $className, array $args);
 }
 /**
  * @package SOY2.SOY2Logic
  */
 abstract class SOY2LogicBase implements SOY2LogicInterface{
-	public static function getInstance($className,$args){
+	public static function getInstance(string $className, array $args){
 		$obj = new $className();
 		foreach($args as $key => $value){
 			$method = "set".ucwords($key);
@@ -25,7 +25,7 @@ abstract class SOY2LogicBase implements SOY2LogicInterface{
  * @package SOY2.SOY2Logic
  */
 class SOY2Logic{
-	public static function createInstance($classPath,$array = array()){
+	public static function createInstance(string $classPath, array $array=array()){
 		if(!class_exists($classPath)){
 			if(SOY2::import($classPath) == false){
 				throw new Exception("Failed to include ".$classPath);
@@ -61,14 +61,14 @@ class SOY2LogicContainer {
 	private $logics = array();
 	private function __construct(){
 	}
-	public static function get($name,$array = array()){
+	public static function get(string $name, array $array=array()){
 		static $instance;
 		if(!$instance){
 			$instance = new SOY2LogicContainer;
 		}
 		return $instance->_get($name,$array);
 	}
-    private function _get($name,$array = array()){
+    private function _get(string $name, array $array=array()){
     	if(isset($this->logics[$name])){
     		$obj = $this->logics[$name];
     	}else{

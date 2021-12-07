@@ -53,7 +53,7 @@ class HTMLPage extends SOYBodyComponentBase{
 		$this->init();
 		$this->_soy2_page = array();
 		$content = $this->getTemplate();
-		if($content !== false && strlen($content)){
+		if(is_string($content) && strlen($content)){
 			/*
 			 * PHPを許可しないときは<?と?>をエスケープする
 			 * ただしXML宣言は残す
@@ -95,7 +95,7 @@ class HTMLPage extends SOYBodyComponentBase{
 	 * @param クラス名
 	 * @param 初期値
 	 */
-	function create($id,$className,$array = array()){
+	function create(string $id, $className, array $array=array()){
 		if(is_object($className)){
 			$obj = $className;
 			$obj->setId($id);
@@ -141,7 +141,7 @@ class HTMLPage extends SOYBodyComponentBase{
 	 * 	)));
 	 *
 	 */
-	function add($id,$obj){
+	function add(string $id, $obj){
 		if(!$obj instanceof SOY2HTML){
 			return;
 		}
@@ -165,7 +165,7 @@ class HTMLPage extends SOYBodyComponentBase{
 	 * @param $array = array()　setter injection
 	 * @see HTMLPage.add
 	 */
-	function createAdd($id,$className,$array = array()){
+	function createAdd(string $id, string $className, array $array=array()){
 		$this->add($id,$this->create($id,$className,$array));
 	}
 	/**
@@ -310,7 +310,7 @@ class HTMLPage extends SOYBodyComponentBase{
 	 *
 	 * @return キャッシュファイルのパス
 	 */
-	function getCacheFilePath($extension = ".html.php"){
+	function getCacheFilePath(string $extension=".html.php"){
 		return
 			SOY2HTMLConfig::CacheDir()
 			.SOY2HTMLConfig::getOption("cache_prefix") .
