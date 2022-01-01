@@ -7,14 +7,12 @@ class SOY2DAOContainer{
 	private $daos = array();
 	private function __construct(){
 	}
-	public static function get($name,$arguments = array()){
+	public static function get(string $name, array $arguments=array()){
 		static $instance;
-		if(!$instance){
-			$instance = new SOY2DAOContainer;
-		}
+		if(is_null($instance)) $instance = new SOY2DAOContainer;
 		return $instance->_get($name,$arguments);
 	}
-    public static function _get($name,$arguments = array()){
+    public static function _get(string $name, array $arguments=array()){
 		if(isset($this->daos[$name])){
 			$dao  = $this->daos[$name];
 		}else{

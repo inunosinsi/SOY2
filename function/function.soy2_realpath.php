@@ -3,7 +3,7 @@
 /**
  * realpath 末尾が必ず「/」で返値
  */
-function soy2_realpath($dir){
+function soy2_realpath(string $dir){
 	$path = realpath($dir);
 	if(!$path)return $path;
 	$path = str_replace("\\","/",$path);
@@ -13,7 +13,7 @@ function soy2_realpath($dir){
 /**
  * URLの末尾をスラッシュで終わらせるか
  */
-function soy2_realurl($url){
+function soy2_realurl(string $url){
 	//末尾が拡張子の場合はそのまま
 	$arg = substr($url, strrpos($url, "/") + 1);
 	if(!strlen($arg) || $arg == "_notfound") return $url;

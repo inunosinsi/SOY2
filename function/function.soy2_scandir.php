@@ -5,7 +5,7 @@
  *
  * @param $dir ディレクトリ
  */
-function soy2_scandir($dir){
+function soy2_scandir(string $dir){
 	$res = array();
 	$files = scandir($dir);
 	foreach($files as $row){

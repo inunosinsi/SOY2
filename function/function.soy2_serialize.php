@@ -13,6 +13,6 @@ function soy2_serialize($var){
  *
  * @param $string soy2_serializeの出力する文字列
  */
-function soy2_unserialize($string){
-	return (is_string($string)) ? unserialize(stripslashes($string)) : null;
+function soy2_unserialize(string $string){
+	return (strlen($string)) ? unserialize(stripslashes($string)) : array();
 }

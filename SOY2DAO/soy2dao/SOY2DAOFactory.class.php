@@ -14,7 +14,7 @@ class SOY2DAOFactory{
 	 * @param $className DAOImplを生成したいDAOクラス名
 	 * @return DAOImplクラスオブジェクト
 	 */
-	public static function create($className,$arguments = array()){
+	public static function create(string $className, array $arguments=array()){
 		$className = SOY2DAOFactory::importDAO($className);
 		$obj = SOY2DAOFactoryImpl::build($className);
 		foreach($arguments as $key => $value){
@@ -54,7 +54,7 @@ class SOY2DAOFactory{
 	 *
 	 * @return $keyに対応するAnnotationが存在すればその値、なければfalse
 	 */
-	public static function getAnnotation($key,$str){
+	public static function getAnnotation(string $key, string $str){
 		$regex = '@'.$key.'\s+(.+)';
 		$tmp = array();
 		if(!preg_match("/$regex/",$str,$tmp)){
@@ -72,7 +72,7 @@ class SOY2DAOFactory{
 	 *
 	 * @param $className クラス名（パッケージ含む）
 	 */
-	public static function importDAO($className){
+	public static function importDAO(string $className){
 		if(!class_exists($className)){
 			$path = $className;
 			$tmp = array();
@@ -91,7 +91,7 @@ class SOY2DAOFactory{
 	 *
 	 * @param $className クラス名（パッケージ含む）
 	 */
-	public static function importEntity($className){
+	public static function importEntity(string $className){
 		if(!class_exists($className)){
 			$path = $className;
 			$tmp = array();
@@ -121,7 +121,7 @@ class SOY2DAOFactoryImpl extends SOY2DAOFactory {
 	 * @param $className DAOクラス名
 	 * @return DAOImplクラスオブジェクト
 	 */
-	public static function build($className){
+	public static function build(string $className){
 		$implClassName = self::getImplClassName($className);
 		if(class_exists($implClassName)){
 			return new $implClassName();
@@ -390,13 +390,13 @@ class SOY2DAOFactoryImpl extends SOY2DAOFactory {
 	/**
 	 * DAOImplのクラス名を返す
 	 */
-	private static function getImplClassName($className){
+	private static function getImplClassName(string $className){
 		return $className."Impl";
 	}
 	/**
 	 * DAOImplのキャッシュファイル名を返す
 	 */
-	private static function getDaoCacheFilePath($className, $extension = ".class.php"){
+	private static function getDaoCacheFilePath(string $className, string $extension=".class.php"){
 		$reflection = new ReflectionClass($className);
 		return SOY2DAOConfig::DaoCacheDir()
 		       .SOY2DAOConfig::getOption("cache_prefix")."dao_cache_".self::getImplClassName($className)
@@ -411,7 +411,7 @@ class SOY2DAOFactoryImpl extends SOY2DAOFactory {
 	 *
 	 * @return Entityクラス名
 	 */
-	public static function getEntityClassName($className,$daoComment){
+	public static function getEntityClassName(string $className, string $daoComment){
 		$result = self::getAnnotation(SOY2DAOFactory::ANNOTATION_ENTITY,$daoComment);
 		if($result !== false){
 			$entity = $result;

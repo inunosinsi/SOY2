@@ -1,15 +1,8 @@
 <?php
-
-/*
- * Created on 2010/04/28
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
- */
 /**
  * 縦横の最大の大きさ指定してリサイズ
  */
-function soy2_resizeimage_maxsize($filepath,$savepath,$max){
+function soy2_resizeimage_maxsize(string $filepath, string $savepath, int $max){
 	if(function_exists("getimagesize")){
 		list($width, $height, $type, $attr) = getimagesize($filepath);
 	}
@@ -38,7 +31,7 @@ function soy2_resizeimage_maxsize($filepath,$savepath,$max){
 		$width = null;
 		$height = $max;
 	}
-	return soy2_resizeimage($filepath,$savepath,$width,$height);
+	return soy2_resizeimage($filepath, $savepath, $width, $height);
 }
 /**
  * 縦横の大きさ指定してリサイズ
@@ -48,16 +41,16 @@ function soy2_resizeimage_maxsize($filepath,$savepath,$max){
  * @param $width
  * @param $height
  */
-function soy2_resizeimage($filepath,$savepath,$width = null,$height = null){
+function soy2_resizeimage(string $filepath, string $savepath, int $width=-1, int $height=-1){
 	if(class_exists("Imagick")){
 		$thumb = new Imagick($filepath);
 		$imageSize = array($thumb->getImageWidth(),$thumb->getImageHeight());
-		if(is_null($width) && is_null($height)){
+		if($width < 0 && $height < 0){
 			$width = $imageSize[0];
 			$height = $imageSize[1];
-		}else if(is_null($width)){
+		}else if($width < 0){
 			$width = $imageSize[0] * $height / $imageSize[1];
-		}else if(is_null($height)){
+		}else if($height < 0){
 			$height = $imageSize[1] * $width / $imageSize[0];
 		}
 		$thumb->thumbnailImage($width,$height);
@@ -88,7 +81,7 @@ function soy2_resizeimage($filepath,$savepath,$width = null,$height = null){
 	}
 	return soy2_image_resizeimage_gd($filepath,$savepath,$width,$height);
 }
-function soy2_image_resizeimage_gd($filepath,$savepath,$width = null,$height = null){
+function soy2_image_resizeimage_gd(string $filepath, string $savepath, int $width=-1, int $height=-1){
 	$info = pathinfo($filepath); //php version is 5.2.0 use pathinfo($filepath,PATHINFO_EXTENSION);
 	if(!isset($info["extension"])) {
 		trigger_error("Failed [Type is empty] " . __FILE__ . ":" . __LINE__,E_USER_ERROR);
@@ -103,12 +96,12 @@ function soy2_image_resizeimage_gd($filepath,$savepath,$width = null,$height = n
 	}
 	$srcImage = $from($filepath);
 	$imageSize = getimagesize($filepath);
-	if(is_null($width) && is_null($height)){
+	if($width < 0 && $height < 0){
 		$width = $imageSize[0];
 		$height = $imageSize[1];
-	}else if(is_null($width)){
+	}else if($width < 0){
 		$width = $imageSize[0] * $height / $imageSize[1];
-	}else if(is_null($height)){
+	}else if($height < 0){
 		$height = $imageSize[1] * $width / $imageSize[0];
 	}
 	$dstImage = imagecreatetruecolor($width,$height);

@@ -26,28 +26,6 @@ class SOY2HTMLBase{
 	 *
 	 */
 	function __call(string $name, array $args){
-		/** PHP7.4対策で廃止
-		if(method_exists($this,"createAdd") && preg_match('/^add([A-Za-z]+)$/',$name,$tmp) && count($args)>0){
-			$class = "HTML" . $tmp[1];
-			if(class_exists($class)){
-				$id = array_shift($args);
-				$arguments  = (count($args)>0 && is_array($args[0])) ? @$args[0] : array();
-				$this->createAdd($id,$class,$arguments);
-				if(isset($arguments["value"])){
-					$this->createAdd($id . "_text","HTMLLabel",array(
-						"text" => $arguments["value"]
-					));
-				}
-				if(($name == "addTextarea") && isset($args["text"])){
-					$this->createAdd($id . "_text","HTMLLabel",array(
-						"text" => $arguments["text"]
-					));
-				}
-				return;
-			}
-		}
-		**/
-
 		if(!$this->functionExists($name) && $name != "HTMLPage" && $name != "WebPage"){
 			throw new SOY2HTMLException("Method not found: ".$name);
 		}

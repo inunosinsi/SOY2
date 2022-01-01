@@ -2,9 +2,9 @@
 /*
  * PHPのバージョンによってsetcookieのオプションの値を変える
  */
-function soy2_setcookie($key, $value=null, $opts=array()){
+function soy2_setcookie(string $key, string $value="", array $opts=array()){
 	if(!count($opts)) $opts = session_get_cookie_params();	//optsが空の場合はセッションの設定を用いる
-	if(is_null($value))	$opts["expires"] = time()-1;	//valueがnullの場合はクッキーを削除する
+	if(!strlen($value))	$opts["expires"] = time()-1;	//valueが空文字の場合はクッキーを削除する
 	if(isset($opts["lifetime"])) unset($opts["lifetime"]);	//lifetimeがある場合は削除
 
 	if(!isset($opts["path"]) || !is_string($opts["path"]) || !strlen($opts["path"])) $opts["path"] = "/";

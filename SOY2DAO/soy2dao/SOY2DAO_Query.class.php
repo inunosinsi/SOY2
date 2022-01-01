@@ -74,7 +74,7 @@ class SOY2DAO_Query{
 	 * where句およびhaving句のPHP式の実行
 	 * :を使うときは\でエスケープしておく必要がある
 	 */
-	function parseExpression($arguments){
+	function parseExpression(array $arguments){
 		/*
 		 * 引数の$argumentsはevalの中で使われている
 		 */
@@ -116,7 +116,7 @@ class SOY2DAO_Query{
 	 * MySQL: ` バッククォート
 	 * SQLite, PostgreSQL: " ダブルクォート
 	 */
-	public function quoteIdentifier($identifier){
+	public function quoteIdentifier(string $identifier){
 		if(strlen(preg_replace("/[a-zA-Z0-9_]+/","",$identifier))>0){
 			/*
 			 * @table table1 join table2 on (table1.id=table2.subid)
@@ -141,7 +141,7 @@ class SOY2DAO_Query{
 	/**
 	 * 識別子の引用符を外す
 	 */
-	public function unquote($value){
+	public function unquote(string $value){
 		$quote = "";
 		switch(SOY2DAOConfig::type()){
 			case SOY2DAOConfig::DB_TYPE_MYSQL :

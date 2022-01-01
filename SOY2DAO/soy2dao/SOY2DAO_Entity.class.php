@@ -17,7 +17,7 @@ class SOY2DAO_Entity{
 	 * @return EntityClassのProperty名を連想配列のキーとし、値にカラム名が入ったArrayを返す
 	 * @param readOnlyな属性も取得するかどうか
 	 */
-	function getColumns($flag = false){
+	function getColumns(bool $flag=false){
 		$array = array();
 		foreach($this->columns as $column){
 			 if(!$flag && $column->readOnly)continue;
@@ -37,7 +37,7 @@ class SOY2DAO_Entity{
 	 * カラム名からSOY2DAO_EntityColumnオブジェクトを取得
 	 * @param $name カラム名
 	 */
-	function getColumnByName($name,$isThrow = true){
+	function getColumnByName(string $name, bool $isThrow=true){
 		$name = strtolower($name);
 		if(!isset($this->reverseColumns[$name])){
 			if($isThrow){

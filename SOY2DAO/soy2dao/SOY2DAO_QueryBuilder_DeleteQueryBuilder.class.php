@@ -16,7 +16,7 @@ class SOY2DAO_DeleteQueryBuilder extends SOY2DAO_QueryBuilder{
 	 *
 	 * @return SOY2DAO_Query
 	 */
-	protected static function build($methodName,$entityInfo,$noPersistents,$columns){
+	protected static function build(string $methodName, $entityInfo, array $noPersistents, array $columns){
 		$query = new SOY2DAO_Query();
 		$query->prefix = "delete";
 		$query->table = $entityInfo->table;

@@ -35,8 +35,8 @@ class SOY2DAO_EntityBase {
 	/**
      * get by id
      */
-    final function get($id = null){
-    	if($id){
+    final function get(int $id=0){
+    	if($id > 0){
     		$res = $this->getDAO()->getById($id);
     	}else{
     		$res = $this->getDAO()->getById($this->getId());

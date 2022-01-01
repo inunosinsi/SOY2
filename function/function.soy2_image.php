@@ -6,7 +6,7 @@
  * @return Array("width" => int, "height" => int)
  * 指定した画像の幅と高さを返す
  */
-function soy2_image_info($filepath){
+function soy2_image_info(string $filepath){
 	if(!is_readable($filepath) || is_dir($filepath)){
 		return false;
 	}

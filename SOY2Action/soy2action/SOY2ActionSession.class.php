@@ -53,7 +53,7 @@ class SOY2ActionSessionBase{
 		}
 	}
 	function getAttribute($key){
-		return (isset($this->_hash[$key])) ? soy2_unserialize($this->_hash[$key]) : null;
+		return (isset($this->_hash[$key]) && is_string($this->_hash[$key])) ? soy2_unserialize($this->_hash[$key]) : null;
 	}
 	function clearAttributes(){
 		$this->_hash = array();

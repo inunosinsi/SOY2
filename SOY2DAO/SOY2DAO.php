@@ -1,5 +1,156 @@
 <?php
-
+/**
+ * @package SOY2.SOY2DAO
+ * SOY2DAO全般の設定をするSingletonクラス
+ *
+ * @author Miyazawa
+ */
+class SOY2DAOConfig{
+	var $type;
+	var $dsn;
+	var $user = '';
+	var $pass = '';
+	var $daoDir = "dao/";
+	var $entityDir = "entity/";
+	var $daoCacheDir;	//Daoのキャッシュはディフォルトは行わない
+	var $event = array();
+	/*
+	 * PDOのDSN prefixから末尾の:を取り除いた値
+	 */
+	const DB_TYPE_MYSQL = "mysql";
+	const DB_TYPE_SQLITE = "sqlite";
+	const DB_TYPE_POSTGRES = "pgsql";
+	/*
+	 * オプション
+	 * limit_query … limit句を使うかどうか(boolean)
+	 * keep_statement … statementのキャッシュを強制にする
+	 * connection_failure … throw or abort
+	 * cache_prefix … キャッシュファイルの先頭に付加する文字列
+	 * use_pconnect … 持続的接続を使うかどうか(boolean) PDO::ATTR_PERSISTENT => true
+	 */
+	var $options = array();
+	/*
+	 * テーブル名マッピング
+	 */
+	var $tableMappings = array();
+	/**
+	 * Constructor
+	 */
+	private function __construct(){}
+	/**
+	 * @return SOY2DAOConfig
+	 */
+	private static function &getInstance(){
+		static $_static;
+		if(!$_static)$_static = new SOY2DAOConfig();
+		return $_static;
+	}
+	public static function Dsn(string $dsn=""){
+		$config =& self::getInstance();
+		$res = $config->dsn;
+		if(strlen($dsn)){
+			$config->dsn = $dsn;
+			$config->type = substr($dsn,0,strpos($dsn,":"));
+		}
+		return $res;
+	}
+	public static function user(string $user=""){
+		$config =& self::getInstance();
+		$res = $config->user;
+		if(strlen($user)){
+			$config->user = $user;
+		}
+		return $res;
+	}
+	public static function pass(string $pass=""){
+		$config =& self::getInstance();
+		$res = $config->pass;
+		if(strlen($pass)){
+			$config->pass = $pass;
+		}
+		return $res;
+	}
+	public static function type(){
+		$config =& self::getInstance();
+		return $config->type;
+	}
+	public static function DaoDir(string $dir=""){
+		$config = self::getInstance();
+		$res = $config->daoDir;
+		if(strlen($dir)){
+			if(substr($dir,strlen($dir)-1) != '/'){
+				throw new SOY2DAOException("[SOY2DAO] DaoDir must end by '/'.");
+			}
+			$config->daoDir = str_replace("\\", "/", $dir);
+		}
+		return $res;
+	}
+	public static function EntityDir(string $dir=""){
+		$config = self::getInstance();
+		$res = $config->entityDir;
+		if(strlen($dir)){
+			if(substr($dir,strlen($dir)-1) != '/'){
+				throw new SOY2DAOException("[SOY2DAO] EntityDir must end by '/'.");
+			}
+			$config->entityDir = str_replace("\\", "/", $dir);
+		}
+		return $res;
+	}
+	public static function DaoCacheDir(string $dir=""){
+		$config = self::getInstance();
+		$res = $config->daoCacheDir;
+		if(strlen($dir)){
+			if(substr($dir,strlen($dir)-1) != '/'){
+				throw new SOY2DAOException("[SOY2DAO] EntityDir must end by '/'.");
+			}
+			$config->daoCacheDir = str_replace("\\", "/", $dir);
+		}
+		return $res;
+	}
+	public static function setOption(string $key, string $value=""){
+		$config = self::getInstance();
+		if($value)$config->options[$key] = $value;
+		return (isset($config->options[$key]) ) ? $config->options[$key] : null;
+	}
+	public static function getOption(string $key){
+		return self::setOption($key);
+	}
+	public static function setTableMapping(string $key, string $value=""){
+		$config = self::getInstance();
+		if($value)$config->tableMappings[$key] = $value;
+		return (isset($config->tableMappings[$key]) ) ? $config->tableMappings[$key] : $key;
+	}
+	public static function getTableMapping(string $key){
+		return self::setTableMapping($key);
+	}
+	/*
+	 *
+	 * QueryEvent
+	 *
+	 * SQL発行時にイベント発生
+	 *
+	 */
+	public static function setQueryEvent($function){
+		$config = self::getInstance();
+		if(!isset($config->event["query"]))$config->event["query"] = array();
+		$config->event["query"][] = $function;
+	}
+	public static function setUpdateQueryEvent($function){
+		$config = self::getInstance();
+		if(!isset($config->event["updateQuery"]))$config->event["updateQuery"] = array();
+		$config->event["updateQuery"][] = $function;
+	}
+	public static function getQueryEvent(){
+		$config = self::getInstance();
+		if(!isset($config->event["query"]))$config->event["query"] = array();
+		return $config->event["query"];
+	}
+	public static function getUpdateQueryEvent(){
+		$config = self::getInstance();
+		if(!isset($config->event["updateQuery"]))$config->event["updateQuery"] = array();
+		return $config->event["updateQuery"];
+	}
+}
 /**
  * SOY2DAO
  * DAOImplやDAOの基底となるクラス
@@ -61,10 +212,8 @@ class SOY2DAO{
 	 *
 	 * @return bind配列
 	 */
-	function buildBinds($sql,$binds){
-		if($sql instanceof SOY2DAO_Query){
-			$sql = $sql->getQuery();
-		}
+	function buildBinds($sql, array $binds){
+		if($sql instanceof SOY2DAO_Query) $sql = $sql->getQuery();
 		$sql = preg_replace("/'[^']*'/","",$sql);
 		$regex = ":([a-zA-Z0-9_]*)";
 		$tmp = array();
@@ -105,7 +254,7 @@ class SOY2DAO{
 	 * @param カラム名(省略可能)
 	 * @return SQL文
 	 */
-	function &buildQuery($method,$noPersistents = array(),$columns = array(),$queryType = null){
+	function &buildQuery(string $method, array $noPersistents=array(), array $columns=array(), string $queryType=""){
 		if(!isset($this->_query[$method])){
 			$this->_query[$method] =
 				SOY2DAO_QueryBuilder::buildQuery($method,$this->getEntityInfo(),$noPersistents,$columns,$queryType);
@@ -119,7 +268,7 @@ class SOY2DAO{
 	 * @param PDOより帰ってきた配列
 	 * @return Entityオブジェクト
 	 */
-	function getObject($row){
+	function getObject(array $row){
 		$entityInfo = $this->getEntityInfo();
 		$objName = $entityInfo->name;
 		$obj = new $objName();
@@ -149,7 +298,7 @@ class SOY2DAO{
 	 * @return PDOオブジェクト
 	 */
 	function &getDataSource(){
-		return SOY2DAO::_getDataSource($this->getDsn(),$this->getDbUser(),$this->getDbPass());
+		return SOY2DAO::_getDataSource((string)$this->getDsn(), (string)$this->getDbUser(), (string)$this->getDbPass());
 	}
 	function releaseDataSource(){
 		SOY2DAO::_releaseDataSource();
@@ -157,15 +306,13 @@ class SOY2DAO{
 	function clearStatementCache(){
 		$this->_statementCache = array();
 	}
-	public static function &_getDataSource($dsn = null,$user = null, $pass = null){
+	public static function &_getDataSource(string $dsn="",  string $user="", string $pass=""){
 		static $pdo;
-		if(is_null($pdo)){
-			$pdo = array();
-		}
-		$dsn = (is_null($dsn)) ? SOY2DAOConfig::Dsn() : $dsn;
+		if(is_null($pdo)) $pdo = array();
+		if(!strlen($dsn)) $dsn = SOY2DAOConfig::Dsn();
 		if(!isset($pdo[$dsn])){
-			$user = (is_null($user)) ? SOY2DAOConfig::user() : $user;
-			$pass = (is_null($pass)) ? SOY2DAOConfig::pass() : $pass;
+			if(!strlen($user)) $user = SOY2DAOConfig::user();
+			if(!strlen($pass)) $pass = SOY2DAOConfig::pass();
 			$pdoOptions = array(
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 			);
@@ -201,7 +348,7 @@ class SOY2DAO{
 	/**
 	 * find
 	 */
-    public static function find($className,$arguments = array()){
+    public static function find(string $className, array $arguments=array()){
 		if(!is_array($arguments))$arguments = array("id" => $arguments);
 		SOY2DAOFactory::importEntity($className);
 		$daoName = $className . "DAO";
@@ -227,7 +374,7 @@ class SOY2DAO{
 	 *
 	 * @return 結果配列
 	 */
-	function executeQuery($query,$binds = array(),$keepStatement = false){
+	function executeQuery($query, array $binds=array(), bool $keepStatement=false){
 		if($query instanceof SOY2DAO_Query){
 			if(is_string($this->getOrder()) && strlen($this->getOrder())){
 				$query->setOrder($this->getOrder());
@@ -356,7 +503,7 @@ class SOY2DAO{
 	 *
 	 * @return 結果
 	 */
-	function executeUpdateQuery($sql,$binds = array(),$keepStatement = false){
+	function executeUpdateQuery($sql, array $binds=array(), bool $keepStatement=false){
 		if($sql instanceof SOY2DAO_Query){
 			if(is_string($this->getOrder()) && strlen($this->getOrder())){
 				$sql->setOrder($this->getOrder());
@@ -534,5 +681,36 @@ class SOY2DAO{
 	 */
 	function getResponseTime(){
 		return $this->_responseTime;
+	}
+}
+/**
+ * SOY2DAOから吐き出すException
+ */
+class SOY2DAOException extends Exception{
+	private $pdoException;
+	private $query;
+	function __construct(string $msg, Exception $e=null){
+		$this->pdoException = $e;
+		parent::__construct($msg);
+	}
+	function getPDOExceptionMessage(){
+		if(!$this->pdoException)return "";
+		$message = $this->pdoException->getMessage();
+		if($this->pdoException instanceof PDOException && !empty($this->pdoException->errorInfo)){
+			$message .= "; ".implode(", ", $this->pdoException->errorInfo);
+		}
+		return $message;
+	}
+	function getPdoException() {
+		return $this->pdoException;
+	}
+	function setPdoException($pdoException) {
+		$this->pdoException = $pdoException;
+	}
+	function getQuery() {
+		return $this->query;
+	}
+	function setQuery($query) {
+		$this->query = $query;
 	}
 }

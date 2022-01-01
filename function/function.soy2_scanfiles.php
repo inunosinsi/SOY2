@@ -4,7 +4,7 @@
  * soy2_scanfiles
  * 特定のディレクトリの下にあるファイルを全て列挙
  */
-function soy2_scanfiles($dir,$depth = -1){
+function soy2_scanfiles(string $dir, int $depth=-1){
 	$res = array();
 	$dir = soy2_realpath($dir);
 	if($depth == 0)return $res;

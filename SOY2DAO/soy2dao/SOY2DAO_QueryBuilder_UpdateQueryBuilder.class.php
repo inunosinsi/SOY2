@@ -16,7 +16,7 @@ class SOY2DAO_UpdateQueryBuilder extends SOY2DAO_QueryBuilder{
 	 *
 	 * @return SOY2DAO_Query
 	 */
-	protected static function build($methodName,$entityInfo,$noPersistents,$columns){
+	protected static function build(string $methodName, $entityInfo, array $noPersistents, array $columns){
 		$query = new SOY2DAO_Query();
 		$query->prefix = "update";
 		$query->table = $entityInfo->table;
