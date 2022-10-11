@@ -180,9 +180,9 @@ class SOY2DAO{
 	 * @return QueryのString
 	 */
 	function getQuery(){
-		if(!isset($this->_query[$this->_method])){
-			$query = $this->buildQuery($this->_method);
-			return $query;
+		if(!is_string($this->_method)) $this->_method = "";
+		if(!strlen($this->_method) || !isset($this->_query[$this->_method])){
+			return $this->buildQuery($this->_method);
 		}
 		return $this->_query[$this->_method];
 	}
