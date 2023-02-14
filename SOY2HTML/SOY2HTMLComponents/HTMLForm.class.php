@@ -72,11 +72,11 @@ abstract class HTMLFormElement extends SOY2HTML{
 	private $pattern;
 	function execute(){
 		parent::execute();
-		$disabled = (is_string($this->disabled) || is_bool($this->disabled)) ? "disabled" : "";
+		$disabled = (is_string($this->disabled) || (is_bool($this->disabled)) && $this->disabled) ? "disabled" : "";
 		$this->setAttribute("disabled", $disabled, false);
-		$readonly = (is_string($this->readonly) || is_bool($this->readonly)) ? "readonly" : "";
+		$readonly = (is_string($this->readonly) || (is_bool($this->readonly) && $this->readonly)) ? "readonly" : "";
 		$this->setAttribute("readonly", $readonly, false);
-		$required = (is_string($this->required) || is_bool($this->required)) ? "required" : "";
+		$required = (is_string($this->required) || (is_bool($this->required) && $this->required)) ? "required" : "";
 		$this->setAttribute("required", $required, false);
 		$placeholder = (is_string($this->placeholder)) ? trim($this->placeholder) : "";
 		$this->setAttribute("placeholder", $placeholder, false);
