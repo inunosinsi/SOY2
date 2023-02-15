@@ -81,7 +81,7 @@ class SOY2PageController implements SOY2_Controller{
 		$controller = self::init();
 		$controller->defaultPath = $path;
 	}
-	public static function jump(string $path){
+	public static function jump(string $path=""){
 		$url = self::createLink($path, true);
 		header("Location: ".$url);
 		exit;

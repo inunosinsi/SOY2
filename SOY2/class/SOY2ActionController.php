@@ -21,7 +21,7 @@ class SOY2ActionController implements SOY2_Controller{
 	/**
 	 * 他のURLへ移動
 	 */
-	public static function jump(string $url){}
+	public static function jump(string $url=""){}
 	/**
 	 * 現在のURLを再読込（queryは変更可能）
 	 */
