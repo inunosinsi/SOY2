@@ -55,9 +55,14 @@ class HTMLForm extends SOYBodyComponentBase{
  * @package SOY2.SOY2HTML
  */
 class HTMLUploadForm extends HTMLForm{
+
+	private $accept;
+
 	function execute(){
 		parent::execute();
 		$this->setAttribute("enctype","multipart/form-data");
+		$accept = (is_string($this->accept)) ? trim($this->accept) : "";
+		$this->setAttribute("accept", $accept, false);
 	}
 }
 /**
@@ -70,6 +75,7 @@ abstract class HTMLFormElement extends SOY2HTML{
 	private $required;
 	private $placeholder;
 	private $pattern;
+	private $autocomplete;
 	function execute(){
 		parent::execute();
 		$disabled = (is_string($this->disabled) || (is_bool($this->disabled)) && $this->disabled) ? "disabled" : "";
@@ -82,6 +88,8 @@ abstract class HTMLFormElement extends SOY2HTML{
 		$this->setAttribute("placeholder", $placeholder, false);
 		$pattern = (is_string($this->pattern)) ? trim($this->pattern) : "";
 		$this->setAttribute("pattern", $pattern, false);
+		$autocomplete = (is_string($this->autocomplete)) ? trim($this->autocomplete) : "";
+		$this->setAttribute("autocomplete", $autocomplete, false);
 	}
 	function setName($value){
 		$this->name = $value;
@@ -116,6 +124,12 @@ abstract class HTMLFormElement extends SOY2HTML{
 	}
 	function setPattern($pattern){
 		$this->pattern = $pattern;
+	}
+	function getAutocomplete(){
+		return $this->autocomplete;
+	}
+	function setAutocomplete($autocomplete){
+		$this->autocomplete = $autocomplete;
 	}
 }
 /**
