@@ -33,7 +33,7 @@ class SOY2DAO_QueryBuilder{
 	/**
 	 * @return SOY2DAO_Query
 	 */
-	protected static function build(string $methodName, $entityInfo, array $noPersistents, array $columns){
+	protected static function build(string $methodName, SOY2DAO_Entity $entityInfo, array $noPersistents, array $columns){
 		return new SOY2DAO_Query();
 	}
 }
