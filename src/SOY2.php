@@ -1,4 +1,6 @@
 <?php /* soy2_build 2018-12-27 04:49:07 */
+namespace Brassica;
+
 /* SOY2/SOY2.php */
 class SOY2{
 	private $_rootDir = "webapp/";
