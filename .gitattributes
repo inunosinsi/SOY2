@@ -1,0 +1,13 @@
+/.gitignore      export-ignore
+/function        export-ignore
+/SOY2            export-ignore
+/SOY2Action      export-ignore
+/SOY2DAO         export-ignore
+/SOY2Debug       export-ignore
+/SOY2HTML        export-ignore
+/SOY2Logger      export-ignore
+/SOY2Logic       export-ignore
+/SOY2Mail        export-ignore
+/SOY2Plugin      export-ignore
+/SOY2Session     export-ignore
+/README.md       export-ignore
