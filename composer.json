@@ -1,0 +1,15 @@
+{
+    "name": "saitodev/soy2",
+    "authors": [
+        {
+            "name": "Tsuyoshi Saito",
+            "email": "info@saitodev.co"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Saitodev\\SOY2\\": "src/"
+        }
+    }
+}
