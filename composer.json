@@ -9,7 +9,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Saitodev\\SOY2\\": "src/"
+            "Brassica\\SOY2\\": "src/"
         }
     }
 }
