@@ -13,9 +13,6 @@ function soy2_strpos(string $haystack, string $needle, int $offset = 0){
 function soy2_strrpos(string $haystack, string $needle, int $offset = 0){
 	$res = strrpos($haystack, $needle, $offset);
 	return (is_numeric($res)) ? $res : -1;
-<<<<<<< HEAD
-}
-=======
 }
 
 function soy2_stripos(string $haystack, string $needle, int $offset = 0){
@@ -27,4 +24,3 @@ function soy2_strripos(string $haystack, string $needle, int $offset = 0){
 	$res = strripos($haystack, $needle, $offset);
 	return (is_numeric($res)) ? $res : -1;
 }
->>>>>>> 4202aacc0d58046855c6de4f139599a8d53f5c83
