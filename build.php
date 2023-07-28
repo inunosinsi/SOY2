@@ -5,13 +5,16 @@
  */
 function read_code_file(string $path){
 	$code = trim(file_get_contents($path));
-	$code = ltrim($code);
+	$code = trim($code);
 	$code = ltrim($code, "<?php");
-	$code = rtrim($code);
+	$code = trim($code);
 	$code = rtrim($code, "?>");
-	//$code = str_replace("<?php", "", $code);
-	//$code = str_replace("?.", "", $code);
-	return $code;
+	$code = trim($code);
+	for(;;){
+		if(is_bool(strpos($code, "\n\n"))) break;
+		$code = trim(str_replace("\n\n", "\n", $code));
+	}
+	return "\n".$code;
 }
 
 /**
