@@ -69,7 +69,7 @@ switch($mode){
 if(file_exists($dust)) unlink($dust);
 
 // build
-file_put_contents($dust, "<?php\n/**\n * https://github.com/inunosinsi/soycms\n */", FILE_APPEND);
+file_put_contents($dust, "<?php\n/**\n * https://github.com/inunosinsi/SOY2\n */", FILE_APPEND);
 foreach($list as $className => $on){
 	if($on === 0) continue;
 	$dir = __DIR__."/".$className."/";
