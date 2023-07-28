@@ -5,8 +5,12 @@
  */
 function read_code_file(string $path){
 	$code = trim(file_get_contents($path));
-	$code = str_replace("<?php", "", $code);
-	$code = str_replace("?.", "", $code);
+	$code = ltrim($code);
+	$code = ltrim($code, "<?php");
+	$code = rtrim($code);
+	$code = rtrim($code, "?>");
+	//$code = str_replace("<?php", "", $code);
+	//$code = str_replace("?.", "", $code);
 	return $code;
 }
 
@@ -70,8 +74,8 @@ foreach($list as $className => $on){
 		case "SOY2":
 			file_put_contents($dust, read_code_file($dir."SOY2.php"), FILE_APPEND);
 			file_put_contents($dust, read_code_file($dir."SOY2_Controller.class.php"), FILE_APPEND);
-			file_put_contents($dust, read_code_file($dir."class/SOY2PageController.php"), FILE_APPEND);
 			file_put_contents($dust, read_code_file($dir."class/SOY2ActionController.php"), FILE_APPEND);
+			file_put_contents($dust, read_code_file($dir."class/SOY2PageController.php"), FILE_APPEND);
 			break;
 		case "SOY2Mail":
 			file_put_contents($dust, read_code_file($dir."SOY2Mail.php"), FILE_APPEND);
