@@ -6,6 +6,9 @@
 class SOY2Action extends SOY2ActionBase{
 	const SUCCESS = "_success_";
 	const FAILED = "_failed_";
+
+	private $_result;
+	
 	/**
 	 * Action実行前準備
 	 */
