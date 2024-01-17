@@ -100,7 +100,7 @@ class SOY2Mail_ServerConfig {
     /**
      * import config
      */
-    function import($str){
+    function import(string $str){
     	$obj = unserialize(stripslashes($str));
     	if($obj && $obj instanceof SOY2Mail_ServerConfig){
     		SOY2::cast($this,$obj);

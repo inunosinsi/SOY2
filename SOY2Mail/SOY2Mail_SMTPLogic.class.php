@@ -12,7 +12,7 @@ class SOY2Mail_SMTPLogic extends SOY2Mail implements SOY2Mail_SenderInterface{
 	private $debug = false;
 	private $esmtpOptions = array();
 	private $isSecure = false;
-	function __construct($options){
+	function __construct(array $options){
 		if(!isset($options["smtp.host"])){
 			throw new SOY2MailException("[smtp.host] is necessary.");
 		}
@@ -156,7 +156,7 @@ class SOY2Mail_SMTPLogic extends SOY2Mail implements SOY2Mail_SenderInterface{
 			$this->sendMail($recipient, $bccRecipients);
 		}
 	}
-	function sendMail(SOY2Mail_MailAddress $sendTo,$bccRecipients = array()){
+	function sendMail(SOY2Mail_MailAddress $sendTo, array $bccRecipients=array()){
 		$sent = false;
 		$try = $try_connect = 0;
 		while(!$sent){
@@ -192,7 +192,7 @@ class SOY2Mail_SMTPLogic extends SOY2Mail implements SOY2Mail_SenderInterface{
 			}
 		}
 	}
-	private function _sendMail(SOY2Mail_MailAddress $sendTo,$bccRecipients = array()){
+	private function _sendMail(SOY2Mail_MailAddress $sendTo, array $bccRecipients=array()){
 		$from = $this->getFrom();
 		$title = $this->getEncodedSubject();
 		$body = $this->getEncodedText();
@@ -276,10 +276,10 @@ class SOY2Mail_SMTPLogic extends SOY2Mail implements SOY2Mail_SenderInterface{
 		}
 		$this->con = null;
 	}
-	function data($string){
+	function data(string $string){
 		$this->smtpCommand($string);
 	}
-	function smtpCommand($string){
+	function smtpCommand(string $string){
 		if(!$this->con){
 			throw new SOY2MailException('SMTP is null');
  			return;
@@ -348,12 +348,12 @@ class SOY2Mail_SMTPLogic extends SOY2Mail implements SOY2Mail_SenderInterface{
 	}
 }
 class SOY2Mail_SMTPAuth_CramMD5{
-	static function getResponse($user, $pass, $challengeStr){
+	static function getResponse(string $user, string $pass, string $challengeStr){
 		return $user." ".hash_hmac("md5",$challengeStr,$pass);
 	}
 }
 class SOY2Mail_SMTPAuth_DigestMD5{
-	static function getResponse($user, $pass, $challengeStr, $hostname){
+	static function getResponse(string $user, string $pass, string $challengeStr, string $hostname){
 		$challenge = array();
 		if(preg_match_all('/([-a-z]+)=(?:"([^"]*)"|([^=,]*))(?:,|$)/u',$challengeStr,$matches,PREG_SET_ORDER)){
 			foreach($matches as $matche){

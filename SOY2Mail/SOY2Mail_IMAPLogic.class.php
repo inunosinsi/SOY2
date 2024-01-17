@@ -8,7 +8,7 @@ class SOY2Mail_IMAPLogic extends SOY2Mail implements SOY2Mail_ReceiverInterface{
 	private $folder;
 	private $user;
 	private $pass;
-	function __construct($options) {
+	function __construct(array $options) {
 		if(!function_exists("imap_open")){//extension_loaded("imap")
 			throw new SOY2MailException("The extension 'imap' is necessary.");
 		}
@@ -113,7 +113,7 @@ class SOY2Mail_IMAPLogic extends SOY2Mail implements SOY2Mail_ReceiverInterface{
 	/**
 	 * imap_fetchstructureの返り値のオブジェクトのtypeとsubtypeからMIME-Typeをテキストで返す
 	 */
-	function getMimeType($type, $subType){
+	function getMimeType(string $type, string $subType){
 		$mimeType = "";
 		switch($type){
 			case 0:
@@ -149,7 +149,7 @@ class SOY2Mail_IMAPLogic extends SOY2Mail implements SOY2Mail_ReceiverInterface{
 	/**
 	 * imap_fetchstructureの返り値のオブジェクトのparametersから欲しいattributeの値を返す
 	 */
-	function getParameterValue($parameters, $attribute){
+	function getParameterValue(array $parameters, string $attribute){
 		$attribute = strtolower($attribute);
 		foreach($parameters as $param){
 			if(strtolower($param->attribute) == $attribute){

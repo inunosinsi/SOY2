@@ -1,8 +1,7 @@
 <?php
 
 class SOY2Mail_SendMailLogic extends SOY2Mail implements SOY2Mail_SenderInterface{
-    function __construct($options) {
-    }
+    function __construct(array $options) {}
     function open(){}
     function close(){}
     function send(){
@@ -12,7 +11,7 @@ class SOY2Mail_SendMailLogic extends SOY2Mail implements SOY2Mail_SenderInterfac
 			$this->sendMail($recipient, $bccRecipients);
 		}
     }
-    function sendMail($sendTo,$bccRecipients = array()){
+    function sendMail(SOY2Mail_MailAddress $sendTo, array $bccRecipients=array()){
 		$to = $sendTo->getString();
 		$from = $this->getFrom();
 		$title = $this->getEncodedSubject();

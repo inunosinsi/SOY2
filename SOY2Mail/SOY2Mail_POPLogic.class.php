@@ -8,7 +8,7 @@ class SOY2Mail_POPLogic extends SOY2Mail implements SOY2Mail_ReceiverInterface{
 	private $folder;
 	private $user;
 	private $pass;
-	function __construct($options){
+	function __construct(array $options){
 		if(!isset($options["pop.host"])){
 			throw new SOY2MailException("[pop.host] is necessary.");
 		}
@@ -58,10 +58,10 @@ class SOY2Mail_POPLogic extends SOY2Mail implements SOY2Mail_ReceiverInterface{
 			$buff = $this->getPopResponse();
 			if($buff == ".")break;
 			$array = explode(" ",$buff);
-			if(!is_numeric($array[0]))continue;
-			if(!$mailId)$mailId = $array[0];
+			if(!is_numeric($array[0])) continue;
+			if(is_null($mailId)) $mailId = $array[0];
 		}
-		if(!$mailId)return false;
+		if(is_null($mailId)) return false;
 		$res = $this->popCommand("RETR ".$mailId);
 		$flag = false;
 		$header = "";
@@ -140,7 +140,7 @@ class SOY2Mail_POPLogic extends SOY2Mail implements SOY2Mail_ReceiverInterface{
 		$mail->setEncoding($encoding);
 		return $mail;
 	}
-	function popCommand($string){
+	function popCommand(string $string){
 		fputs($this->con, $string."\r\n");
   		$buff = fgets($this->con);
 		if(strpos($buff,"+OK") == 0){
@@ -157,7 +157,7 @@ class SOY2Mail_POPLogic extends SOY2Mail implements SOY2Mail_ReceiverInterface{
 	/**
 	 * 受信メッセージのヘッダーを解析し配列にする
 	 */
-	function parseHeaders($header){
+	function parseHeaders(string $header){
 		$headers = array();
 		$header = preg_replace("/\r\n[ \t]+/", ' ', $header);
 		$raw_headers = explode("\r\n", $header);
