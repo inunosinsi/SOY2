@@ -54,14 +54,15 @@ switch($mode){
 	case 1:	// soycms
 		$dust = $dustDir."soy2_build.min.php";
 		$list["SOY2Action"] = 1;
+		$list["SOY2Debug"] = 1;
 		break;
 	case 2:	// soyshop
 		$dust = $dustDir."soy2_build.min.php";
 		break;
 	default:// full package
 		$dust = $dustDir."soy2_build.php";
-		$list["SOY2Debug"] = 1;
 		$list["SOY2Action"] = 1;
+		$list["SOY2Debug"] = 1;
 		$list["SOY2Logger"] = 1;
 		break;
 }
