@@ -2755,7 +2755,7 @@ class SOY2DAOFactoryImpl extends SOY2DAOFactory {
 			$str .= '$'.$param->getName();
 			if($param->isDefaultValueAvailable()){
 				$defValue = $param->getDefaultValue();
-				if(is_null($defValue)){
+				if(is_null($defValue) || is_array($defValue)){
 					$defValue = 'null';
 				}else if(!is_numeric($defValue) && is_string($defValue)){
 					$defValue = '"'.$defValue.'"';
