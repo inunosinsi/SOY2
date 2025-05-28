@@ -232,12 +232,15 @@ class HTMLPage extends SOYBodyComponentBase{
 			$html = "";
 		}
 
+		// BOM付きに対応
+		$html = trim($html);
+
 		$layoutDir = SOY2HTMLConfig::LayoutDir();
 		$layout = $this->getLayout();
 		if($layoutDir && is_file($layoutDir . $layout)){
 			include($layoutDir . $layout);
 		}else{
-			echo $html;
+			echo trim$html;
 		}
 		self::popPageStack();
 	}
