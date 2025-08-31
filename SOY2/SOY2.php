@@ -50,6 +50,12 @@ class SOY2{
 		$files = scandir($dirPath);
 		foreach($files as $file){
 			if(preg_match('/.php$/',$file) && is_readable($dirPath.$file)){
+				/**
+				 *  一部サーバで、._から始まるファイル名のPHPファイルが生成されてしまう為の対策
+				 */
+				$_pos = strpos($file, "._");
+				if(is_numeric($_pos) && $_pos === 0) continue;
+				
 				include_once($dirPath.$file);
 			}
 		}
