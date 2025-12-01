@@ -34,7 +34,7 @@ abstract class SOY2ActionFormValidator{
 		if(!class_exists($class)){
 			throw new Exception("[SOY2ActionFormValidator]".$class." is not defined.");
 		}
-		$obj = json_decode($json);
+		$obj = (is_string($json) ? json_decode($json) : array();
 		$validator = new $class($obj,$param);
 		$validator->_isRequire = (isset($obj->require)) ? $obj->require : false;
 		if(!empty($obj->message)){
