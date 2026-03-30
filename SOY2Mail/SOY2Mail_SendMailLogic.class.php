@@ -97,7 +97,7 @@ class SOY2Mail_SendMailLogic extends SOY2Mail implements SOY2Mail_SenderInterfac
 			$to = str_replace("\n", "\r\n", $to);
 			$headersText = implode("\r\n",$headers);
 		}
-		$sendmail_params  = "-f".$from->getAddress();
+		$sendmail_params  = "-f ".escapeshellarg(trim((string)$from->getAddress()));
 		mail($to, $title, $body, $headersText, $sendmail_params);
 		if(count($bccRecipients) >0){
 			$headers[] = "X-To: ".$sendTo->getString();
