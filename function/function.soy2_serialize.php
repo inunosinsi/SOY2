@@ -17,6 +17,12 @@ function soy2_unserialize(string $string){
 	// シリアル化されたオブジェクトを復元する時に、指定のオブジェクトでない場合は復元を禁止する
 	static $allowed;
 	if(is_null($allowed)){
+		/**
+		 * @usage 同一ディレクトリ内にallowedClasses.phpを作成
+		 * シリアライズ化したおオブジェクトのデータを復元する時に復元を許可するオブジェクト名を配列で指定
+		 * <?php
+		 * $allowed = array();
+		 */
 		$allowed = array();
 		if(file_exists(__DIR__."/allowedClasses.php")) include(__DIR__."/allowedClasses.php");
 		if(!is_array($allowed) || !count($allowed)) $allowed = false;
