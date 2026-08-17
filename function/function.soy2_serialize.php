@@ -30,6 +30,6 @@ function soy2_unserialize(string $string){
 	if(!strlen($string)) return array();
 	
 	return unserialize(stripslashes($string), array(
-		array("allowed_classes" => $allowed)
+		"allowed_classes" => $allowed
 	));
 }
