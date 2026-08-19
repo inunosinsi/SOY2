@@ -8895,7 +8895,7 @@ function soy2_unserialize(string $string){
 	if(is_null($allowed)){
 		/**
 		 * @usage 同一ディレクトリ内にallowedClasses.phpを作成
-		 * シリアライズ化したおオブジェクトのデータを復元する時に復元を許可するオブジェクト名を配列で指定
+		 * シリアライズ化したオブジェクトのデータを復元する時に復元を許可するオブジェクト名を配列で指定
 		 * <?php
 		 * $allowed = array();
 		 */
