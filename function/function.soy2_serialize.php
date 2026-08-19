@@ -25,6 +25,12 @@ function soy2_unserialize(string $string){
 	// allowed_classes の判定処理（静的保持）
 	static $allowed;
 	if(is_null($allowed)){
+		/**
+		 * @usage 同一ディレクトリ内にallowedClasses.phpを作成
+		 * シリアライズ化したオブジェクトのデータを復元する時に復元を許可するオブジェクト名を配列で指定
+		 * <?php
+		 * $allowed = array();
+		 */
 		$allowed = array();
 		if(file_exists(__DIR__."/allowedClasses.php")) include(__DIR__."/allowedClasses.php");
 		if(!is_array($allowed) || !count($allowed)) $allowed = false;
