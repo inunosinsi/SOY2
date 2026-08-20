@@ -8893,12 +8893,6 @@ function soy2_unserialize(string $string){
 	// allowed_classes の判定処理（静的保持）
 	static $allowed;
 	if(is_null($allowed)){
-		/**
-		 * @usage 同一ディレクトリ内にallowedClasses.phpを作成
-		 * シリアライズ化したオブジェクトのデータを復元する時に復元を許可するオブジェクト名を配列で指定
-		 * <?php
-		 * $allowed = array();
-		 */
 		$allowed = array();
 		if(file_exists(__DIR__."/allowedClasses.php")) include(__DIR__."/allowedClasses.php");
 		if(!is_array($allowed) || !count($allowed)) $allowed = false;
@@ -8918,11 +8912,18 @@ function soy2_unserialize(string $string){
 
  		// 改ざんチェック（不正なら即拒否）
 		if (!hash_equals($calculatedHmac, $hmac)) return null;
-		return unserialize($serialized, array("allowed_classes" => $allowed));
-    }else{
-        // --- 【旧形式（HMACなし）の処理】 ---
-        return unserialize($rawString, array("allowed_classes" => $allowed));
-    }
+		$data = unserialize($serialized, array("allowed_classes" => $allowed));
+	}else{
+		// --- 【旧形式（HMACなし）の処理】 ---
+		$data = unserialize($rawString, array("allowed_classes" => $allowed));
+	}
+
+	// __PHP_Incomplete_Classの場合はnullを返す
+	if (is_object($data) && $data instanceof __PHP_Incomplete_Class) {
+		return null;
+	}
+
+	return $data;
 }
 /**
  * soy2_scanfiles
