@@ -8980,6 +8980,8 @@ function soy2_require(string $file, bool $isThrowException=false){
  * @param $dir ディレクトリ
  */
 function soy2_scandir(string $dir){
+	if(!is_dir($dir)) return array();
+	
 	$res = array();
 	$files = scandir($dir);
 	foreach($files as $row){
